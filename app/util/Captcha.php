@@ -41,6 +41,7 @@ class Captcha
             $word .= $letter;
         }
         $_SESSION['captcha'] = $word;
+        echo $word;
         imagepng($image, "image.png");
     }
 

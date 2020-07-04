@@ -10,9 +10,13 @@ class Router {
     protected $params = [];
 
     public function __construct() {
-        $arr = require 'app/routes/web.php';
-        foreach ($arr as $key => $val) {
-            $this->add($key, $val);
+        $arr = [];
+        $arr[] = require 'app/routes/web.php';
+        $arr[] = require 'app/routes/api.php';
+        foreach ($arr as $routes) {
+            foreach ($routes as $key => $val) {
+                $this->add($key, $val);
+            }
         }
     }
 

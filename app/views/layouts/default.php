@@ -23,11 +23,24 @@
                 <li class="nav-item">
                     <a class="nav-link" href="../account/register">Регистрация</a>
                 </li>
+                <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            API
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="../api/doc">How to use our API?</a>
+                            <a class="dropdown-item" href="../api/json_example">API JSON Example</a>
+                            <a class="dropdown-item" href="../api/xml_example">API XML Example</a>
+                        </div>
+                </li>
                 <?php
                 if (isset($name)) {
+                    require_once $_SERVER['DOCUMENT_ROOT'] . '/app/util/CsrfToken.php';
+                    $csrf = new \app\util\CsrfToken();
                     echo
                     '<li class="nav-item dropdown">
                     <form action="../app/handlers/login_handler.php?exit=1" method="post">
+                        <input name="csrf_token" type="hidden" value="'.$csrf->getToken().'"/>
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
                     echo $name;
                     echo

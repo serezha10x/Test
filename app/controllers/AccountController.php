@@ -10,14 +10,16 @@ class AccountController extends Controller {
 
     public function __construct($route) {
         parent::__construct($route);
+        $this->model->Register('seasd2323','f23213dasdsf','sdfdsf');
     }
 
 	public function loginAction() {
-        $vars = ['login' => $_COOKIE['login']];
+        $vars = ['name' => $_SESSION['name']];
         $this->view->render('Вход', $vars);
 	}
 
 	public function registerAction() {
-		$this->view->render('Регистрация');
+        $vars = ['name' => $_SESSION['name']];
+        $this->view->render('Регистрация', $vars);
 	}
 }

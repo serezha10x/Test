@@ -2,9 +2,6 @@
 
 namespace app\core;
 
-use app\core\View;
-use app\models\AccountModel;
-
 
 abstract class Controller {
 
@@ -17,10 +14,9 @@ abstract class Controller {
     public function __construct($route) {
         $this->route = $route;
         if (!$this->checkAcl()) {
-            View::errorCode(403);
+            //View::errorCode(403);
         }
-        $this->model = new AccountModel();
-        //$this->model->check_user($_COOKIE['login'], $_COOKIE['password']);
+        $this->model = $this->loadModel($route['controller']);
         $this->view = new View($route);
     }
 
@@ -31,18 +27,25 @@ abstract class Controller {
         }
     }
 
-    public function checkAcl() {
+    public function checkAcl()  {
+        //var_dump($_POST);
+        if ($this->route['controller'] === 'api') {
+            $info = $_REQUEST;
+        } else {
+            $info = $_SESSION;
+        }
         $this->acl = require 'app/acl/'.$this->route['controller'].'.php';
+
         if ($this->isAcl('all')) {
             return true;
         }
-        elseif (isset($_COOKIE['login']) and isset($_COOKIE['isAuthorized']) and $this->isAcl('authorize')) {
+        elseif (isset($info['name']) and isset($info['email']) and $this->isAcl('authorize')) {
             return true;
         }
-        elseif (!isset($_COOKIE['login']) and !isset($_COOKIE['isAuthorized']) and $this->isAcl('guest')) {
+        elseif (!isset($info['name']) and !isset($info['email']) and $this->isAcl('guest')) {
             return true;
         }
-        elseif (isset($_COOKIE['login']) and $_COOKIE['is_admin'] != 0 and $this->isAcl('admin')) {
+        elseif (isset($info['name']) and $info['email'] != 0 and $this->isAcl('admin')) {
             return true;
         }
         return false;

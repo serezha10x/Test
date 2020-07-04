@@ -11,7 +11,7 @@ class UserModel
     const NAME_FIELD = 'name';
     const EMAIL_FIELD = 'email';
     const PHOTO_FIELD = 'photo';
-    const KEY_FIELD = 'key';
+    const API_KEY_FIELD = 'api_key';
 
     private $id;
     private $name;

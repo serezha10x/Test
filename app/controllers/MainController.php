@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\core\Controller;
+use app\util\Mailer;
 
 class MainController extends Controller {
 
@@ -17,6 +18,10 @@ class MainController extends Controller {
             $vars = [
                 'name' => $_SESSION['name'],
                 'users' => $users
+            ];
+        } else {
+	        $vars = [
+	            'message' => 'Авторизуйтесь для просмотра других пользователей'
             ];
         }
         $this->view->render('Главная страница', $vars);

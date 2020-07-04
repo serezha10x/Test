@@ -3,8 +3,7 @@
 namespace app\models;
 
 use app\core\Model;
-use app\core\Router;
-
+use PDO;
 
 
 class AccountModel extends Model
@@ -23,9 +22,13 @@ class AccountModel extends Model
             if(session_status() == PHP_SESSION_NONE) {
                 session_start();
             }
-            $_SESSION['name'] = $name;
-            $_SESSION['email'] = $email;
-            Router::redirect('/');
+            $row = $stm->fetch(PDO::FETCH_ASSOC);
+            $_SESSION['name'] = $row['name'];
+            $_SESSION['email'] = $row['email'];
+            $_SESSION['api_key'] = $row['api_key'];
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -37,29 +40,22 @@ class AccountModel extends Model
         $count_email = $stm->fetchAll();
         if ($count_email[0]['_count'] == 0) {
             // insert a new user
+            $api_hash = password_hash(microtime(), PASSWORD_DEFAULT);
             $sql_regist = 'INSERT INTO `'.UserModel::TABLE_USER.'`(
-            `' .UserModel::NAME_FIELD.'`, `'.UserModel::EMAIL_FIELD.'`, `'.UserModel::PHOTO_FIELD.'`) VALUES(:name, :email, :photo)';
+            `'  .UserModel::NAME_FIELD.'`, `'.UserModel::EMAIL_FIELD.'`, `'.UserModel::PHOTO_FIELD.'`, `'
+                .UserModel::API_KEY_FIELD . '`) VALUES(:name, :email, :photo, :api_hash);';
             $stm = $this->pdo->prepare($sql_regist);
             $stm->execute(array(
                 ':name' => $name,
                 ':email' => $email,
-                ':photo' => $photo
+                ':photo' => $photo,
+                ':api_hash' => $api_hash
             ));
             $this->Login($name, $email);
             return true;
         } else {
             return false;
         }
-    }
-
-
-    public function ReadUsers($sort_type = 'name') {
-        if (isset($_SESSION['name']) AND isset($_SESSION['email'])) {
-            $sql_select_users = 'SELECT * FROM `'.UserModel::TABLE_USER.'` ORDER BY `'.$sort_type.'`';
-            $users = $this->pdo->query($sql_select_users)->fetchAll();
-            return $users;
-        }
-        return NULL;
     }
 
 
