@@ -8,6 +8,7 @@ use PDO;
 
 class AccountModel extends Model
 {
+
     public function __construct() {
         parent::__construct();
     }

@@ -21,13 +21,16 @@ class Router {
     }
 
     public function add($route, $params) {
-        $route = '#^'.$route.'$#';
+        $route = '#(^'.$route.'$)|('.$route.'\?.*)#';
         $this->routes[$route] = $params;
     }
 
     public function match() {
         // delete first slash
         $url = trim($_SERVER['REQUEST_URI'], '/');
+        // delete get params
+        //$url = mb_substr($url, 0, mb_stripos($url, '?'));
+
         foreach ($this->routes as $route => $params) {
             if (preg_match($route, $url, $matches)) {
                 $this->params = $params;

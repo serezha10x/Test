@@ -1,15 +1,16 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/app/util/CsrfToken.php';
 $csrf = new \app\util\CsrfToken();
+
 if (isset($users) AND count($users) !== 0) {
     echo '
-        <form action="../app/handlers/sort_handler.php" method="get">
+        <form action="../app/handlers/sort_handler.php" method="post">
             <input name="csrf_token" type="hidden" value="'.$csrf->getToken().'"/>
             <br/>
             <p class="text-left font-weight-bold">Выберите метод сортировки:</p>
             <div>
                 <div class="form-check">
-                    <input checked type="radio" id="nameSort" name="sort" value="name">
+                    <input type="radio" id="nameSort" name="sort" value="name">
                     <label for="nameSort">Сортировка по имени</label>
                 </div>
                 <div class="form-check">
@@ -41,6 +42,37 @@ if (isset($users) AND count($users) !== 0) {
         <br/>
         <?php
     }
+
+    $prev_attr = '';
+    $next_attr = '';
+    if ($current_page == 1) {
+        $prev_attr = 'disabled';
+    }
+    if ($current_page == $count) {
+        $next_attr = 'disabled';
+    }
+
+    echo '<nav>
+        <ul class="pagination">
+            <li class="page-item '.$prev_attr.'">
+                <a class="page-link" href="http://'.$_SERVER[HTTP_HOST].'?page='.($current_page-1).'">Previous</a>
+            </li>';
+    for($i = 1; $i <= $count; ++$i) {
+        if ($current_page == $i) {
+            echo '<li class="page-item active">
+                      <a class="page-link" href="#">'.$i.'<span class="sr-only">(current)</span></a>
+                  </li>';
+        } else {
+            echo '<li class="page-item">
+                      <a class="page-link" href="'. "http://$_SERVER[HTTP_HOST]?page=$i" .'">'.$i.'</a>
+                  </li>';
+        }
+    }
+    echo '<li class="page-item '.$next_attr .'">
+                <a class="page-link" href="http://'.$_SERVER[HTTP_HOST].'?page='.($current_page+1).'">Next</a>
+            </li>
+        </ul>
+    </nav>';
     ?>
     </div>
 <?php

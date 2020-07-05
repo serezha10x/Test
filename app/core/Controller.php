@@ -14,9 +14,11 @@ abstract class Controller {
     public function __construct($route) {
         $this->route = $route;
         if (!$this->checkAcl()) {
-            //View::errorCode(403);
+            View::errorCode(403);
         }
         $this->model = $this->loadModel($route['controller']);
+        //setDB - $host, $dbname, $username, $password
+        $this->model->setDB('127.0.0.1', 'Test', 'root', '');
         $this->view = new View($route);
     }
 
@@ -28,9 +30,8 @@ abstract class Controller {
     }
 
     public function checkAcl()  {
-        //var_dump($_POST);
         if ($this->route['controller'] === 'api') {
-            $info = $_REQUEST;
+            return true;
         } else {
             $info = $_SESSION;
         }

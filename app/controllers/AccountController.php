@@ -10,7 +10,6 @@ class AccountController extends Controller {
 
     public function __construct($route) {
         parent::__construct($route);
-        $this->model->Register('seasd2323','f23213dasdsf','sdfdsf');
     }
 
 	public function loginAction() {

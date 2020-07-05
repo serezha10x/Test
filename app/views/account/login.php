@@ -9,12 +9,12 @@
 	<div class="form-group">
         <label for="inputName">Логин</label>
         <input id="inputName" name="name" class="form-control" type="text" placeholder="Введите логин">
-        <small id="nameHelp" class="form-text text-muted"></small>
+        <small id="nameHelp" class="form-text text-danger"></small>
     </div>
     <div class="form-group">
         <label for="inputEmail">Email</label>
         <input name="email" type="email" class="form-control" id="inputEmail" aria-describedby="emailHelp" placeholder="Введите email">
-        <small id="emailHelp" class="form-text text-muted"></small>
+        <small id="emailHelp" class="form-text text-danger"></small>
     </div>
     <br/><button id="submit" name="submit" type="submit" class="btn btn-primary btn-lg">Войти</button>
 </form>

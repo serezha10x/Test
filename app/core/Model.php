@@ -9,10 +9,11 @@ use PDO;
 abstract class Model {
 
     protected $pdo;
-	protected $username = 'root';
+    protected $host = '127.0.0.1';
+    protected $dbname = 'Test';
+    protected $username = 'root';
 	protected $password = '';
-	protected $host = '127.0.0.1';
-	protected $dbname = 'Test';
+
 
 	public function __construct() {
         $this->pdo = $this->connect();
@@ -34,13 +35,23 @@ abstract class Model {
         $this->pdo = NULL;
     }
 
-    public function ReadUsers($sort_type = 'name') {
+    public function ReadUsers($sort_type = 'name', $offset = NULL, $limit = NULL) {
         if ((isset($_SESSION['name']) AND isset($_SESSION['email'])) OR (isset($_REQUEST['name']) AND isset($_REQUEST['email']))) {
-            $sql_select_users = 'SELECT * FROM `'.UserModel::TABLE_USER.'` ORDER BY `'.$sort_type.'`';
+            if ($offset === NULL OR $limit === NULL) {
+                $sql_select_users = 'SELECT * FROM `'.UserModel::TABLE_USER.'` ORDER BY `'.$sort_type.'`;';
+            } else {
+                $sql_select_users = 'SELECT * FROM `'.UserModel::TABLE_USER.'` ORDER BY `'.$sort_type.'` LIMIT '.$limit.' OFFSET '. $offset;
+            }
             $users = $this->pdo->query($sql_select_users)->fetchAll(PDO::FETCH_ASSOC);
             return $users;
         }
         return NULL;
+    }
+
+
+    public function getCount() : int {
+        $sql_count_all = 'SELECT COUNT(*) as _count FROM `' . UserModel::TABLE_USER .'`;';
+        return $this->pdo->query($sql_count_all)->fetch(PDO::FETCH_ASSOC)['_count'];
     }
 
     public function CheckApiKey(string $api_key) : bool {

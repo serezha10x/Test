@@ -12,6 +12,23 @@ class Captcha
     private $num_of_letters = 6;
 
 
+    public function setWidth(int $width) {
+        $this->width = $width;
+    }
+
+    public function setHeight(int $height) {
+        $this->height = $height;
+    }
+
+    public function setFontSize(int $font_size) {
+        $this->font_size = $font_size;
+    }
+
+    public function setNumOfLetters(int $num_of_letters) {
+        $this->num_of_letters = $num_of_letters;
+    }
+
+
     public function createImage() {
         $image = imagecreatetruecolor($this->width, $this->height);
         $background_color = imagecolorallocate($image,255, 255, 255);
@@ -37,11 +54,11 @@ class Captcha
         $step = ($this->width - 20) / 6;
         for ($i = 0; $i < $this->num_of_letters; $i++) {
             $letter = $letters[rand(0, $len-1)];
-            imagettftext($image, $this->font_size, 0, 10+($i*$step), ($this->height+$this->font_size) / 2 , $black, 'C:\OSPanel\domains\test\fonts\liber-mono.ttf' , $letter);
+            imagettftext($image, $this->font_size, 0, 10+($i*$step), ($this->height+$this->font_size) / 2 ,
+                $black, $_SERVER['DOCUMENT_ROOT'].'\fonts\liber-mono.ttf' , $letter);
             $word .= $letter;
         }
         $_SESSION['captcha'] = $word;
-        echo $word;
         imagepng($image, "image.png");
     }
 
