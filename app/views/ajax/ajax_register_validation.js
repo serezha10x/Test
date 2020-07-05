@@ -60,7 +60,7 @@ function sendAjaxFormWithFile(ajax_form, url) {
             }
              console.log(redirect);
             if (redirect) {
-                window.location.replace(location.host);
+                window.location.replace('/');
             }
         },
         complete: function() {

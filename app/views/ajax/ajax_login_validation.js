@@ -31,7 +31,7 @@ function sendAjaxForm(ajax_form, url) {
                 redirect = false;
             }
             if (redirect) {
-                window.location.replace(location.host);
+                window.location.replace('/');
             }
         },
     });
